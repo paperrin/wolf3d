@@ -6,7 +6,7 @@
 /*   By: paperrin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/29 20:45:28 by paperrin          #+#    #+#             */
-/*   Updated: 2017/10/30 02:50:13 by paperrin         ###   ########.fr       */
+/*   Updated: 2017/10/30 06:34:03 by paperrin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void			image_free(void *mlx_core, t_mlx_image **image)
 	}
 }
 
-void			image_put_pixel(t_mlx_image *image, t_vec3f pos
+void			image_put_pixel(t_mlx_image *image, t_vec2i pos
 		, unsigned int color)
 {
 	size_t			index;
@@ -54,4 +54,21 @@ void			image_clear(t_mlx_image *image, unsigned int color)
 	i = -1;
 	while (++i < image->size.x * image->size.y)
 		image->pixels[i] = color;
+}
+
+void			image_fill_rect(t_mlx_image *image, t_vec2i pos, t_vec2i size
+		, unsigned int color)
+{
+	int		x;
+	int		y;
+
+	y = -1;
+	while (++y < size.y)
+	{
+		x = -1;
+		while (++x < size.x)
+		{
+			image_put_pixel(image, ft_vec2i(pos.x + x, pos.y + y), color);
+		}
+	}
 }

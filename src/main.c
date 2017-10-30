@@ -6,7 +6,7 @@
 /*   By: paperrin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/29 20:32:48 by paperrin          #+#    #+#             */
-/*   Updated: 2017/10/30 03:59:37 by paperrin         ###   ########.fr       */
+/*   Updated: 2017/10/30 08:27:16 by paperrin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,24 @@ static void		init_player(t_app *app)
 {
 	app->player.pos = ft_vec2f(5.5, 5.5);
 	app->player.dir = ft_vec2f_rot(ft_vec2f(1, 0), 0);
+	app->player.left_pressed = 0;
+	app->player.right_pressed = 0;
+	app->player.up_pressed = 0;
+	app->player.down_pressed = 0;
 }
 
-int		main(int ac, char **av)
+int				main(void)
 {
 	t_app	app;
 
-	(void)ac;
-	(void)av;
-	if (!create_app(&app, 1200, 700, "Fract'ol paperrin"))
+	if (!create_app(&app, 1600, 900, "Wolf3D papabgrall"))
 		return (EXIT_FAILURE);
 	if (!map_load(&app.map))
 		destroy_app(&app, EXIT_FAILURE);
 	init_player(&app);
 	render(&app);
-	mlx_hook(app.mlx.win, X11_KEY_PRESS, 0, &event_key_down, &app);
+	mlx_loop_hook(app.mlx.core, &render, &app);
+	mlx_hook(app.mlx.win, X11_KEY_PRESS, 0, &event_key_press, &app);
 	mlx_hook(app.mlx.win, X11_KEY_RELEASE, 0, &event_key_release, &app);
 	mlx_hook(app.mlx.win, X11_DESTROY_NOTIFY, 0, &event_cross, &app);
 	mlx_loop(app.mlx.core);

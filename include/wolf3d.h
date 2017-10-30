@@ -6,7 +6,7 @@
 /*   By: paperrin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/29 20:34:16 by paperrin          #+#    #+#             */
-/*   Updated: 2017/10/30 03:39:55 by paperrin         ###   ########.fr       */
+/*   Updated: 2017/10/30 07:41:53 by paperrin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@
 # include "libft.h"
 # include "ft_math.h"
 
-typedef struct			s_mlx
+typedef struct		s_mlx
 {
-	void	*core;
-	void	*win;
-}						t_mlx;
+	void			*core;
+	void			*win;
+}					t_mlx;
 
-typedef struct			s_mlx_image
+typedef struct		s_mlx_image
 {
 	void			*image;
 	int				*pixels;
@@ -33,30 +33,35 @@ typedef struct			s_mlx_image
 	int				bytes_width;
 	int				is_big_endian;
 	t_vec2i			size;
-}						t_mlx_image;
+}					t_mlx_image;
 
-typedef struct			s_player
+typedef struct		s_player
 {
-	t_vec2f		pos;
-	t_vec2f		dir;
-	t_vec2f		plane;
-}						t_player;
+	t_vec2f			pos;
+	t_vec2f			dir;
+	t_vec2f			plane;
+	int				left_pressed;
+	int				right_pressed;
+	int				up_pressed;
+	int				down_pressed;
+}					t_player;
 
-typedef struct			s_map
+typedef struct		s_map
 {
-	char		*tiles;
-	char		border_tile_id;
-	t_vec2i		size;
-}						t_map;
+	char			*tiles;
+	char			border_tile_id;
+	unsigned int	face_colors[4];
+	t_vec2i			size;
+}					t_map;
 
-typedef struct			s_app
+typedef struct		s_app
 {
 	t_mlx			mlx;
 	t_mlx_image		*draw_buf;
 	t_vec2i			size;
 	t_player		player;
 	t_map			map;
-}						t_app;
+}					t_app;
 
 typedef struct		s_hit
 {
@@ -69,19 +74,22 @@ typedef struct		s_hit
 	t_vec2f			step;
 }					t_hit;
 
-void			destroy_app(t_app *app, int exit_code);
-void			render(t_app *app);
+void				destroy_app(t_app *app, int exit_code);
+int					render(void *param);
 
-int				map_load(t_map *map);
+void				player_update(t_app *app);
+int					map_load(t_map *map);
 
-int				event_key_release(int key, void *param);
-int				event_key_down(int key, void *param);
-int				event_cross(void *param);
+int					event_key_press(int key, void *param);
+int					event_key_release(int key, void *param);
+int					event_cross(void *param);
 
-t_mlx_image		*image_new(void *mlx_core, int width, int height);
-void			image_free(void *mlx_core, t_mlx_image **image);
-void			image_put_pixel(t_mlx_image *image, t_vec3f pos
+t_mlx_image			*image_new(void *mlx_core, int width, int height);
+void				image_free(void *mlx_core, t_mlx_image **image);
+void				image_put_pixel(t_mlx_image *image, t_vec2i pos
 		, unsigned int color);
-void			image_clear(t_mlx_image *image, unsigned int color);
+void				image_clear(t_mlx_image *image, unsigned int color);
+void				image_fill_rect(t_mlx_image *image, t_vec2i pos
+		, t_vec2i size, unsigned int color);
 
 #endif

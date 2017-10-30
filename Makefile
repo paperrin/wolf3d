@@ -40,7 +40,8 @@ CFILES		=	main.c					\
 				image.c					\
 				event.c					\
 				render.c				\
-				map.c
+				map.c					\
+				player.c
 
 HFILES		=	./include/wolf3d.h			\
 				./include/x11.h

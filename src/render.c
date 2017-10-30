@@ -6,7 +6,7 @@
 /*   By: paperrin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/29 21:59:54 by paperrin          #+#    #+#             */
-/*   Updated: 2017/10/30 04:07:56 by paperrin         ###   ########.fr       */
+/*   Updated: 2017/10/30 07:44:57 by paperrin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ static void		draw_line(t_app *app, int x, float wall_dist, int face)
 		y_max = app->size.y - 1;
 	while (y_min <= y_max)
 	{
-		image_put_pixel(app->draw_buf, ft_vec3f(x, y_min, 0), 0xFF0000);
+		image_put_pixel(app->draw_buf, ft_vec2i(x, y_min)
+				, app->map.face_colors[face]);
 		y_min++;
 	}
 }
@@ -76,7 +77,7 @@ static void		cast_ray(t_app *app, int x, t_vec2f orig, t_vec2f dir)
 	else
 		hit.side_dist.x = (hit.map_pos.x + 1 - orig.x) * hit.delta_dist.x;
 	if (dir.y < 0)
-		hit.side_dist.y = (orig.y - hit.map_pos.y) * hit. delta_dist.y;
+		hit.side_dist.y = (orig.y - hit.map_pos.y) * hit.delta_dist.y;
 	else
 		hit.side_dist.y = (hit.map_pos.y + 1 - orig.y) * hit.delta_dist.y;
 	hit = do_collision_checks(app->map, hit);
@@ -84,8 +85,8 @@ static void		cast_ray(t_app *app, int x, t_vec2f orig, t_vec2f dir)
 		wall_dist = (hit.map_pos.x - orig.x + (1 - hit.step.x) / 2) / dir.x;
 	else
 		wall_dist = (hit.map_pos.y - orig.y + (1 - hit.step.y) / 2) / dir.y;
-	hit.side = dir.x < 0 ? 3 : hit.side;
-	hit.side = dir.y < 0 ? 4 : hit.side;
+	hit.side = (hit.side == 0 && dir.x > 0) ? 2 : hit.side;
+	hit.side = (hit.side == 1 && dir.y < 0) ? 3 : hit.side;
 	draw_line(app, x, wall_dist, hit.side);
 }
 
@@ -111,11 +112,18 @@ static void		render_view(t_app *app)
 	}
 }
 
-void			render(t_app *app)
+int				render(void *param)
 {
-	image_clear(app->draw_buf, 0x0);
-	app->player.plane = ft_vec2f_rot(ft_vec2f_scale(app->player.dir, 2), M_PI / 2);
+	t_app		*app;
+
+	app = (t_app*)param;
+	player_update(app);
+	image_fill_rect(app->draw_buf, ft_vec2i(0, 0)
+			, ft_vec2i(app->size.x, app->size.y / 2), 0xBBBBBB);
+	image_fill_rect(app->draw_buf, ft_vec2i(0, app->size.y / 2)
+			, ft_vec2i(app->size.x, app->size.y / 2), 0x444444);
 	render_view(app);
 	mlx_put_image_to_window(app->mlx.core, app->mlx.win, app->draw_buf->image
 			, 0, 0);
+	return (0);
 }
