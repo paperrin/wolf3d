@@ -6,7 +6,7 @@
 /*   By: paperrin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/29 20:34:16 by paperrin          #+#    #+#             */
-/*   Updated: 2017/10/29 22:27:59 by paperrin         ###   ########.fr       */
+/*   Updated: 2017/10/30 03:39:55 by paperrin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct			s_mlx
 typedef struct			s_mlx_image
 {
 	void			*image;
-	char			*pixels;
+	int				*pixels;
 	int				bits_per_pixel;
 	int				bytes_width;
 	int				is_big_endian;
@@ -45,6 +45,7 @@ typedef struct			s_player
 typedef struct			s_map
 {
 	char		*tiles;
+	char		border_tile_id;
 	t_vec2i		size;
 }						t_map;
 
@@ -57,6 +58,17 @@ typedef struct			s_app
 	t_map			map;
 }						t_app;
 
+typedef struct		s_hit
+{
+	int				hit;
+	int				side;
+	int				tile_id;
+	t_vec2i			map_pos;
+	t_vec2f			side_dist;
+	t_vec2f			delta_dist;
+	t_vec2f			step;
+}					t_hit;
+
 void			destroy_app(t_app *app, int exit_code);
 void			render(t_app *app);
 
@@ -68,6 +80,8 @@ int				event_cross(void *param);
 
 t_mlx_image		*image_new(void *mlx_core, int width, int height);
 void			image_free(void *mlx_core, t_mlx_image **image);
-void			image_put_pixel(t_mlx_image *image, t_vec3f pos, int color);
+void			image_put_pixel(t_mlx_image *image, t_vec3f pos
+		, unsigned int color);
+void			image_clear(t_mlx_image *image, unsigned int color);
 
 #endif

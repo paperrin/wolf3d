@@ -6,7 +6,7 @@
 /*   By: paperrin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/29 20:45:28 by paperrin          #+#    #+#             */
-/*   Updated: 2017/10/29 22:11:38 by paperrin         ###   ########.fr       */
+/*   Updated: 2017/10/30 02:50:13 by paperrin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ t_mlx_image		*image_new(void *mlx_core, int width, int height)
 	if (!(image = (t_mlx_image*)malloc(sizeof(*image))))
 		return (NULL);
 	image->image = mlx_new_image(mlx_core, width, height);
-	image->pixels = mlx_get_data_addr(
-		image
+	image->pixels = (int*)mlx_get_data_addr(
+		image->image
 		, &image->bits_per_pixel
 		, &image->bytes_width
 		, &image->is_big_endian);
@@ -38,10 +38,20 @@ void			image_free(void *mlx_core, t_mlx_image **image)
 	}
 }
 
-void			image_put_pixel(t_mlx_image *image, t_vec3f pos, int color)
+void			image_put_pixel(t_mlx_image *image, t_vec3f pos
+		, unsigned int color)
 {
 	size_t			index;
 
-	index = (((int)pos.y * image->bytes_width) + ((int)pos.x * 4));
-	((int*)image->pixels)[index] = color;
+	index = (((int)pos.y * image->size.x) + ((int)pos.x));
+	image->pixels[index] = color;
+}
+
+void			image_clear(t_mlx_image *image, unsigned int color)
+{
+	int		i;
+
+	i = -1;
+	while (++i < image->size.x * image->size.y)
+		image->pixels[i] = color;
 }

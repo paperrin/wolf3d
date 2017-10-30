@@ -6,7 +6,7 @@
 /*   By: paperrin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/29 20:32:48 by paperrin          #+#    #+#             */
-/*   Updated: 2017/10/29 23:08:37 by paperrin         ###   ########.fr       */
+/*   Updated: 2017/10/30 03:59:37 by paperrin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ static int		create_app(t_app *app, size_t width, size_t height
 		return (0);
 	if (!(app->draw_buf = image_new(app->mlx.core, width, height)))
 		destroy_app(app, EXIT_FAILURE);
-	app->draw_buf->pixels = mlx_get_data_addr(
-			app->draw_buf->image
-			, &app->draw_buf->bits_per_pixel
-			, &app->draw_buf->bytes_width
-			, &app->draw_buf->is_big_endian);
 	return (1);
 }
 
@@ -43,10 +38,8 @@ void			destroy_app(t_app *app, int exit_code)
 
 static void		init_player(t_app *app)
 {
-	app->player.pos = ft_vec2f((float)app->map.size.x / 2
-			, (float)app->map.size.y / 2);
-	app->player.dir = ft_vec2f_rot(ft_vec2f(0, 1), M_PI / 4);
-	app->player.plane = ft_vec2f_rot(app->player.dir, M_PI / 2);
+	app->player.pos = ft_vec2f(5.5, 5.5);
+	app->player.dir = ft_vec2f_rot(ft_vec2f(1, 0), 0);
 }
 
 int		main(int ac, char **av)

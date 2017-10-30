@@ -6,7 +6,7 @@
 /*   By: paperrin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/29 22:15:30 by paperrin          #+#    #+#             */
-/*   Updated: 2017/10/29 22:25:53 by paperrin         ###   ########.fr       */
+/*   Updated: 2017/10/30 03:12:52 by paperrin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ int		map_load(t_map *map)
 		pos.x = 0;
 		while (pos.x < map->size.x)
 		{
-			if (pos.x == 0 || pos.x == map->size.x - 1
-					|| pos.y == 0 || pos.y == map->size.y - 1)
-				map->tiles[pos.y * map->size.x + pos.x] = 1;
+			//if (pos.x == 0 || pos.x == map->size.x - 1
+			//		|| pos.y == 0 || pos.y == map->size.y - 1)
+			//	map->tiles[pos.y * map->size.x + pos.x] = 1;
+			ft_putnbr(map->tiles[pos.y * map->size.x + pos.x]);
 			pos.x++;
 		}
+		ft_putendl("");
 		pos.y++;
 	}
 	return (1);
